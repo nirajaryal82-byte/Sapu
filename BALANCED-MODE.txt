@@ -1,0 +1,21 @@
+ICT Gold AI — QUALITY BALANCED + DASHBOARD FEATURES
+
+Core engine (unchanged logic path):
+- Display threshold ≥62%
+- Auto-trade threshold ≥70%
+- Boosted confirmation weights (CISD 10, Unicorn 7, Liquidity Sweep 6)
+- Multi-confirmation stack bonus
+- Silver Bullet accepts FVG or OB + MSS or displacement
+- Same 11-strategy multi-TF ICT engine
+
+NEW DASHBOARD FEATURES (added, previous features preserved):
+1. Mode badge — "QB ≥62%" in signal panel header
+2. Daily Stats strip — Signals today · Win Rate · Today P&L · Open positions
+3. Live Session bar — current session + Kill Zone indicator + UTC clock
+4. Confidence Breakdown — progress bar + primary/confirmation tags
+5. Quick Risk Calculator — balance / risk% / SL → risk $ + lot size
+6. Recent Signals list — last signals with direction, model, confidence, time
+7. All previous features kept: chart, auto-trade, demo account, history,
+   Telegram/ntfy/email, 24/7 server setup, ICT concepts, kill zones, etc.
+
+Timeframes: 4H → 1H → 15M → 5M → 1M
