@@ -1,0 +1,33 @@
+ICT Gold AI — Complete fixed build
+
+MUST REDEPLOY THIS PACKAGE (old live site was outdated).
+
+=== FIXES ===
+1. Strategy Mode Save → 24/7 scanner (RTDB strategyMode)
+2. Kill Zone Filter: Inside / Outside / Both + live session clock
+3. No fake BUY signal — WAIT until real server signal (<6h)
+4. Live top price from Twelve Data (/api/live-price) with key rotation
+5. Test All Notifications (Telegram + ntfy + FCM + browser)
+6. Analysis page LIVE from Twelve Data (/api/analysis):
+   - Price, condition score, premium/discount array
+   - MTF bias 4H/1H/15M/5M
+   - Dealing range + OTE zones
+   - ICT concepts (FVG, OB, liquidity, MSS, displacement)
+   - Session high/low + Kill Zone status
+7. Signal page: Scan Now, Live Analysis, session strip, MTF mini
+   - Daily stats reset (no demo 7/72%/$412)
+
+=== APIs ===
+GET  /api/live-price
+GET  /api/analysis
+GET  /api/scan-ict
+POST /api/save-config
+POST /api/test-notify
+GET  /api/health
+
+=== AFTER DEPLOY ===
+1. Profile → API keys (or Vercel env TWELVE_DATA_KEY)
+2. Mode + Kill Zone → Save 24/7 Config
+3. Test All Notifications
+4. Analysis → Refresh Analysis
+5. Signal → Scan Now
