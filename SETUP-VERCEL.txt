@@ -1,0 +1,73 @@
+ICT Gold AI — Vercel Deployment (24/7 + multi-key + notifications)
+================================================================
+
+IMPORTANT: Browser / website does NOT need to stay open
+-------------------------------------------------------
+The 24/7 scanner runs as a Vercel Serverless Function triggered by Cron
+every 5 minutes. Closing the browser or phone does not stop scanning.
+Signals are sent automatically to Telegram / ntfy / FCM when a valid setup
+is found.
+
+NOTIFICATION CHANNELS (all optional, independent)
+-------------------------------------------------
+1. Telegram  → TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
+2. ntfy.sh   → NTFY_TOPIC
+3. FCM Push  → FCM_SERVER_KEY + registered web tokens (via /api/register-token)
+
+What is sent automatically:
+- New trade signals (after duplicate check, ~60 min window)
+- Status alerts (rate-limited 30 min) when:
+    • No API keys configured
+    • All Twelve Data keys failed (rate-limit / invalid)
+    • A signal was generated but ALL notify channels failed
+
+Heartbeat:
+- Every scan (success or fail) writes /lastServerHeartbeat to Firebase RTDB
+- /api/health returns lastHeartbeat + cronAlive (true if last run < 15 min)
+
+1. Deploy to Vercel
+   - GitHub + Vercel, or: npx vercel
+   - Or drag-drop the ICT-Gold-AI-Vercel folder
+
+2. Environment Variables (Vercel → Project → Settings → Environment Variables)
+   TWELVE_DATA_KEY        = primary key
+   TWELVE_DATA_KEY_2      = backup #2
+   TWELVE_DATA_KEY_3      = backup #3
+   (or) TWELVE_DATA_KEYS  = key1,key2,key3
+
+   TELEGRAM_BOT_TOKEN     = from @BotFather
+   TELEGRAM_CHAT_ID       = your user/group id
+   NTFY_TOPIC             = optional
+   FCM_SERVER_KEY         = optional (legacy FCM server key)
+   FIREBASE_RTDB_URL      = optional
+   STRATEGY_MODE          = balanced | strict | aggressive | multi
+
+3. Redeploy after setting env vars.
+
+4. Test
+   - Open site → Analysis → 24/7 SERVER SETUP
+   - Fill up to 3 API keys (optional if already in env) → Save 24/7 Config
+   - Click "Test Connection"  → should show TD✓, key count, cronAlive
+   - Click "Run Server Scan Now"
+
+5. Key rotation
+   - Tries KEY → KEY_2 → KEY_3 in order
+   - On any failure (rate limit, invalid, empty data) → next key
+   - Response shows which key was used (masked)
+
+6. Cron reliability note
+   - vercel.json schedules */5 * * * * on /api/scan-ict
+   - Vercel Hobby may limit cron frequency (check current docs)
+   - If needed, use external cron (cron-job.org, EasyCron, etc.) to
+     GET https://YOUR-PROJECT.vercel.app/api/scan-ict every 5 minutes
+   - External cron works even if Vercel free cron is limited
+
+7. "Website not running" / offline
+   - Static site offline does NOT affect the scanner
+   - Only the Vercel function + Firebase RTDB + notification services matter
+   - If the function itself fails (no keys / all keys dead), you receive
+     a Telegram/ntfy status alert automatically
+
+Thresholds (Quality Balanced default):
+  Display / notify  ≥ 62%
+  Auto-trade        ≥ 70%
